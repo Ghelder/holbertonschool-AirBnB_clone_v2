@@ -130,6 +130,12 @@ class HBNBCommand(cmd.Cmd):
 
         arg_parts = arg.split()
 
+        if not arg_parts:
+            print("** class name missing **")
+        elif arg_parts[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+
         params = arg_parts[1:]
 
         obj_params = {}
@@ -159,15 +165,10 @@ class HBNBCommand(cmd.Cmd):
 
             obj_params[key] = value
 
-        if not arg_parts:
-            print("** class name missing **")
-        elif arg_parts[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        else:
-            new_instance = HBNBCommand.classes[arg_parts[0]]()
-            print(new_instance.id)
-            storage.save()
+        new_instance = HBNBCommand.classes[arg_parts[0]]()
+        new_instance.__dict__.update(obj_params)
+        print(new_instance.id)
+        storage.save()
 
     def help_create(self):
         """Help information for the create method"""
